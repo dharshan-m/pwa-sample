@@ -4,9 +4,9 @@ const CameraComponent: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
-  const getUserMedia = async () => {
+  const getUserMedia = async (facingMode: 'user' | 'environment') => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode } });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
@@ -36,7 +36,8 @@ const CameraComponent: React.FC = () => {
   return (
     <div>
       <video ref={videoRef} autoPlay playsInline style={{ width: '100%' }} />
-      <button onClick={getUserMedia}>Open Camera</button>
+      <button onClick={() => getUserMedia('user')}>Front Camera</button>
+      <button onClick={() => getUserMedia('environment')}>Back Camera</button>
       <button onClick={handleStop}>Stop</button>
     </div>
   );
